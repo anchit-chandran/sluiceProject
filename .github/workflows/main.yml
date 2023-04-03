@@ -9,6 +9,11 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
 
     # Checks out the entire repo.
     steps:
@@ -27,13 +32,9 @@ jobs:
         pwd
         python manage.py spectacular --color --file schema.yml
         ls
-    - name: Commit files # transfer the files back into the repository
-      run: |
-        git add .
-        git commit -m "Updating the repository GitHub by adding open api file
-    - name: Push changes # push the output folder to your repo
-      uses: ad-m/github-push-action@master
+    
+    # Commit all changed files back to the repository
+    - uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        force: true
+        file_pattern: 'schema.yml'
 
