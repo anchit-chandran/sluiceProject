@@ -1,0 +1,26 @@
+name: Generate OpenApiJson
+
+# Runs this action whenever there are any changes to the master branch.
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    # Checks out the entire repo.
+    steps:
+    - name: Checks out repo
+      uses: actions/checkout@v3
+
+    # Installs dependencies
+    - name: Generate OpenAPI file
+      run: |
+        python -m venv venv
+        soutce venv/bin/activate
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        cat requirements.txt
