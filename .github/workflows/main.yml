@@ -9,6 +9,11 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
 
     # Checks out the entire repo.
     steps:
@@ -23,6 +28,17 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-        echo "INSTALLED DEPENDENCIES. GENERATING OPENAPI FILE"
-        python manage.py spectacular --color --file schema.yml
+    - name: Convert yaml to json
+      run: |
+        python manage.py spectacular --file schema.yml        
+        # installs yq
+        wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
+        chmod +x /usr/bin/yq
+        # convert yaml to json
+        yq -o=json '.' schema.yml > schema.json
         
+    # Commit all changed files back to the repository
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        file_pattern: 'schema.json'
+
