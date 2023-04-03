@@ -130,5 +130,5 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE' : 'Sluice Inventory',
+    'TITLE' : 'Sluice Inventory CHANGE TO SCHEMA',
 }
