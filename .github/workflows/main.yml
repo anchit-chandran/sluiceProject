@@ -28,19 +28,15 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-        echo "INSTALLED DEPENDENCIES. GENERATING OPENAPI FILE"
-        pwd
-        python manage.py spectacular --color --file schema.yml        
+    - name: Convert yaml to json
+      run: |
+        python manage.py spectacular --file schema.yml        
         # installs yq
         wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
         chmod +x /usr/bin/yq
         # convert yaml to json
-        echo 'CONVERTING TO JSON'
         yq -o=json '.' schema.yml > schema.json
-        echo 'LISTING ALL FILES'
-        ls
         
-    
     # Commit all changed files back to the repository
     - uses: stefanzweifel/git-auto-commit-action@v4
       with:
