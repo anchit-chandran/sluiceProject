@@ -26,4 +26,14 @@ jobs:
         echo "INSTALLED DEPENDENCIES. GENERATING OPENAPI FILE"
         pwd
         python manage.py spectacular --color --file schema.yml
-        
+        ls
+    - name: Commit files # transfer the files back into the repository
+      run: |
+        git add .
+        git commit -m "Updating the repository GitHub by adding open api file
+    - name: Push changes # push the output folder to your repo
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
+
