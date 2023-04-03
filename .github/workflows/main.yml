@@ -31,10 +31,11 @@ jobs:
         echo "INSTALLED DEPENDENCIES. GENERATING OPENAPI FILE"
         pwd
         python manage.py spectacular --color --file schema.yml        
-        # installs jq
-        sudo apt-get install jq
+        # installs yq
+        wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
+        chmod +x /usr/bin/yq
         # convert yaml to json
-        yq r --tojson schema.yml
+        yq -o=json '.' schema.yml
         ls
         
     
